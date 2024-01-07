@@ -218,8 +218,8 @@ const textTemplate = [
         name: "ttb",
         placeholder: "minutes",
         type: "number",
-        min: 5,
-        max: 20,
+        min: 0,
+        max: 50,
       },
       {
         key: 9,
