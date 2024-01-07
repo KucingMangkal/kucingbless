@@ -279,10 +279,10 @@ const textTemplate = [
     description: "",
     url: "/gen/common",
     specialPageCommonCopyPaste: [
-      "Thanks for joining blessing. See you next time!",
-      "Thanks for joining blessing",
-      "See you next time!",
-      "See you next time! Thanks for joining blessing.",
+      "Remember to thank the blessers by pressing “F” (or triangle on console) when the blesses come in! There’s always time to sprinkle some good vibes. :heart:",
+      ":community: Join our Discord (tiny.cc/warframeblessing) to keep yourself updated with mass blessings, or join as a blesser!",
+      "Thanks for coming, blessers and the blessed! May your hunts be fruitful, and your conquests great! And also special thanks to the fellow blessers that made this possible. :heart:",
+      "Placeholder.",
     ],
   },
 ];
