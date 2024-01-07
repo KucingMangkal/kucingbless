@@ -23,20 +23,8 @@ const textTemplate = [
             label: "NA",
           },
           {
-            value: "sa",
-            label: "SA",
-          },
-          {
             value: "eu",
             label: "EU",
-          },
-          {
-            value: "oce",
-            label: "OCE",
-          },
-          {
-            value: "ru",
-            label: "RU",
           },
         ],
       },
