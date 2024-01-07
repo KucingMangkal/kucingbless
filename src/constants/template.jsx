@@ -133,6 +133,8 @@ const textTemplate = [
       },
     ],
     template: (object, forms) => {
+      if (!_isEmpty(object) || !forms) return;
+
       const items = [];
 
       Object.keys(object).forEach((item) => {
@@ -158,7 +160,8 @@ const textTemplate = [
         });
       });
 
-      return !_isEmpty(object) && `!bless ${_orderBy(items, "key").join(" ")}`;
+      // eslint-disable-next-line consistent-return
+      return `!bless ${_orderBy(items, "key").join(" ")}`;
     },
   },
 
@@ -238,6 +241,8 @@ const textTemplate = [
       },
     ],
     template: (object, forms) => {
+      if (!_isEmpty(object) || !forms) return;
+
       const items = [];
       Object.keys(object).forEach((item) => {
         const { label, key } = forms.find((form) => form.name === item);
@@ -262,15 +267,13 @@ const textTemplate = [
         }
       });
 
-      return (
-        !_isEmpty(object) &&
-        `ROLES: ${_orderBy(items, "key").join(
-          ` ${
-            object.variant ??
-            forms.find((form) => form.name === "variant").defaultOptions
-          } `,
-        )}`
-      );
+      // eslint-disable-next-line consistent-return
+      return `ROLES: ${_orderBy(items, "key").join(
+        ` ${
+          object.variant ??
+          forms.find((form) => form.name === "variant").defaultOptions
+        } `,
+      )}`;
     },
   },
 

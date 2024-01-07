@@ -1,12 +1,13 @@
 import { Layout, Menu } from "antd";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import templates from "../../constants/template";
 
 const { Content, Sider } = Layout;
 
 const items = templates.map((item) => ({
   key: item.url,
-  label: <a href={item.url}>{item.name}</a>,
+  label: <Link href={item.url}>{item.name}</Link>,
 }));
 
 function CustomLayout({ children }) {

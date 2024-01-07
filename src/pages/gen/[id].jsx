@@ -9,7 +9,8 @@ import {
   Tooltip,
   Typography,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Layout from "../../component/layout";
 import templates from "../../constants/template";
 import { copyText } from "../../utils/copy-text";
@@ -61,10 +62,14 @@ function CheckboxGroupWithAllOptions({ items, onFormChange }) {
 }
 
 export default function Generator({ resolvedUrl }) {
+  const router = useRouter();
+  const [formValue, setFormValue] = useState({});
   const { form, template, name, description } = templates.filter(
     (item) => item.url === resolvedUrl,
   )[0];
-  const [formValue, setFormValue] = useState({});
+
+  // Reset count to 0 on dynamic route change.
+  useEffect(() => setFormValue({}), [router.asPath]);
 
   const onFormChange = (event) => {
     setFormValue({
@@ -101,7 +106,7 @@ export default function Generator({ resolvedUrl }) {
     });
   };
 
-  const renderedTemplate = template(formValue, form);
+  const renderedTemplate = formValue && template(formValue, form);
 
   return (
     <Layout>
