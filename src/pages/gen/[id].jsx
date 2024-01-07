@@ -9,8 +9,7 @@ import {
   Tooltip,
   Typography,
 } from "antd";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
 import Layout from "../../component/layout";
 import templates from "../../constants/template";
 import { copyText } from "../../utils/copy-text";
@@ -67,51 +66,81 @@ function CheckboxGroupWithAllOptions({ items, onFormChange }) {
 }
 
 export default function Generator({ resolvedUrl }) {
-  const router = useRouter();
-  const [formValue, setFormValue] = useState({});
   const { form, template, name, description } = templates.filter(
     (item) => item.url === resolvedUrl,
   )[0];
 
-  // Reset count to 0 on dynamic route change.
-  useEffect(() => setFormValue({}), [router.asPath]);
+  const [formState] = Form.useForm();
+  const [, updateState] = useState();
+  const forceUpdate = useCallback(() => updateState({}), []);
+
+  useEffect(() => {
+    const getLocalStorageForms = localStorage.getItem(
+      resolvedUrl.split("/").pop(),
+    );
+
+    if (getLocalStorageForms) {
+      const parsedForm = { ...JSON.parse(getLocalStorageForms) };
+
+      formState.setFieldsValue(parsedForm);
+
+      forceUpdate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formState, resolvedUrl]);
 
   const onFormChange = (event) => {
-    setFormValue({
-      ...formValue,
-      [event.target.name]: event.target.value,
-    });
+    formState.setFieldValue(event.target.name, event.target.value);
+
+    localStorage.setItem(
+      resolvedUrl.split("/").pop(),
+      JSON.stringify(formState.getFieldsValue()),
+    );
+
+    forceUpdate();
   };
 
   const onSelectChange = (value, formName) => {
-    setFormValue({
-      ...formValue,
-      [formName]: value,
-    });
+    formState.setFieldValue(formName, value);
+    localStorage.setItem(
+      resolvedUrl.split("/").pop(),
+      JSON.stringify(formState.getFieldsValue()),
+    );
+
+    forceUpdate();
   };
 
   const onNumberChange = (value, formName) => {
-    setFormValue({
-      ...formValue,
-      [formName]: value,
-    });
+    formState.setFieldValue(formName, value);
+    localStorage.setItem(
+      resolvedUrl.split("/").pop(),
+      JSON.stringify(formState.getFieldsValue()),
+    );
+
+    forceUpdate();
   };
 
   const onRadioChange = (e, formName) => {
-    setFormValue({
-      ...formValue,
-      [formName]: e.target.value,
-    });
+    formState.setFieldValue(formName, e.target.value);
+    localStorage.setItem(
+      resolvedUrl.split("/").pop(),
+      JSON.stringify(formState.getFieldsValue()),
+    );
+
+    forceUpdate();
   };
 
   const onCheckboxChange = (value, formName) => {
-    setFormValue({
-      ...formValue,
-      [formName]: value,
-    });
+    formState.setFieldValue(formName, value);
+    localStorage.setItem(
+      resolvedUrl.split("/").pop(),
+      JSON.stringify(formState.getFieldsValue()),
+    );
+
+    forceUpdate();
   };
 
-  const renderedTemplate = formValue && template(formValue, form);
+  const renderedTemplate = () => template(formState, form);
 
   return (
     <Layout>
@@ -120,7 +149,7 @@ export default function Generator({ resolvedUrl }) {
         <Paragraph>{description}</Paragraph>
       </Typography>
 
-      <Form autoComplete="off" layout="vertical" style={{ maxWidth: "600px" }}>
+      <Form form={formState} layout="vertical" style={{ maxWidth: "600px" }}>
         {form.map((item) => {
           if (item.type === "select") {
             return (
@@ -133,7 +162,6 @@ export default function Generator({ resolvedUrl }) {
                   name={item.name}
                   placeholder={item.placeholder}
                   options={item.options}
-                  value={formValue[item.name]}
                 />
               </Form.Item>
             );
@@ -150,7 +178,6 @@ export default function Generator({ resolvedUrl }) {
                   placeholder={item.placeholder}
                   min={item.min}
                   max={item.max}
-                  value={formValue[item.name]}
                 />
               </Form.Item>
             );
@@ -162,7 +189,6 @@ export default function Generator({ resolvedUrl }) {
                 <Radio.Group
                   onChange={(e) => onRadioChange(e, item.name)}
                   size="large"
-                  value
                 >
                   {item.options.map((radioItem) => (
                     <Radio.Button key={radioItem.value} value={radioItem.value}>
@@ -176,11 +202,13 @@ export default function Generator({ resolvedUrl }) {
 
           if (item.type === "checkbox") {
             return (
-              <CheckboxGroupWithAllOptions
-                key={item.key}
-                items={item.options}
-                onFormChange={(e) => onCheckboxChange(e, item.name)}
-              />
+              <Form.Item key={item.key} name={item.name} label={item.label}>
+                <CheckboxGroupWithAllOptions
+                  key={item.key}
+                  items={item.options}
+                  onFormChange={(e) => onCheckboxChange(e, item.name)}
+                />
+              </Form.Item>
             );
           }
 
@@ -208,7 +236,7 @@ export default function Generator({ resolvedUrl }) {
               textAlign: "left",
             }}
           >
-            {renderedTemplate}
+            {renderedTemplate()}
           </div>
         </Button>
       </Tooltip>

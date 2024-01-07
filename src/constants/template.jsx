@@ -70,7 +70,7 @@ const textTemplate = [
         key: 4,
         label: "Time till bless (in minutes)",
         placeholder: "minutes",
-        name: "ttb",
+        name: "bttb",
         type: "number",
         min: 5,
         max: 20,
@@ -108,7 +108,9 @@ const textTemplate = [
         ],
       },
     ],
-    template: (object, forms) => {
+    template: (formState, forms) => {
+      const object = formState.getFieldsValue();
+
       if (!forms) return;
 
       const items = [];
@@ -124,7 +126,7 @@ const textTemplate = [
             object[item].length === currentForm.options.length
               ? "all"
               : object[item].join(" ");
-        } else if (item === "ttb") {
+        } else if (item === "bttb") {
           val = `${object[item]}m`;
         } else {
           val = object[item];
@@ -191,7 +193,7 @@ const textTemplate = [
       {
         key: 8,
         label: "Time till bless (in minutes)",
-        name: "ttb",
+        name: "rttb",
         placeholder: "minutes",
         type: "number",
         min: 0,
@@ -216,16 +218,21 @@ const textTemplate = [
         ],
       },
     ],
-    template: (object, forms) => {
+    template: (formState, forms) => {
+      const object = formState.getFieldsValue();
+
+      if (!forms) return;
+
       const items = [];
+
       Object.keys(object).forEach((item) => {
         const currentForm = forms.find((form) => form.name === item);
 
-        if (!currentForm) return;
+        if (!currentForm || !object[item]) return;
 
         if (item === "variant") {
           // do nothing
-        } else if (item === "ttb") {
+        } else if (item === "rttb") {
           // eslint-disable-next-line no-unused-expressions
           object[item] &&
             items.push({
