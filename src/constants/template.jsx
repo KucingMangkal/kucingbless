@@ -44,20 +44,8 @@ const textTemplate = [
             label: "larunda",
           },
           {
-            value: "vesper",
-            label: "vesper",
-          },
-          {
             value: "strata",
             label: "strata",
-          },
-          {
-            value: "leonov",
-            label: "leonov",
-          },
-          {
-            value: "kuiper",
-            label: "kuiper",
           },
           {
             value: "orcus",
