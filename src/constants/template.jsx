@@ -133,7 +133,7 @@ const textTemplate = [
       },
     ],
     template: (object, forms) => {
-      if (!_isEmpty(object) || !forms) return;
+      if (!forms) return;
 
       const items = [];
 
@@ -141,7 +141,7 @@ const textTemplate = [
         const currentForm = forms.find((form) => form.name === item);
         let val;
 
-        if (!object[item]) return;
+        if (!object[item] || !currentForm) return;
 
         if (item === "blessType") {
           val =
@@ -161,7 +161,7 @@ const textTemplate = [
       });
 
       // eslint-disable-next-line consistent-return
-      return `!bless ${_orderBy(items, "key").join(" ")}`;
+      return !_isEmpty(object) && `!bless ${_orderBy(items, "key").join(" ")}`;
     },
   },
 
@@ -241,39 +241,46 @@ const textTemplate = [
       },
     ],
     template: (object, forms) => {
-      if (!_isEmpty(object) || !forms) return;
-
       const items = [];
       Object.keys(object).forEach((item) => {
-        const { label, key } = forms.find((form) => form.name === item);
+        const currentForm = forms.find((form) => form.name === item);
+
+        if (!currentForm) return;
+
         if (item === "variant") {
           // do nothing
         } else if (item === "ttb") {
           // eslint-disable-next-line no-unused-expressions
           object[item] &&
             items.push({
-              key,
+              key: currentForm.key,
               toString: () => `Bless in ${object[item]} minutes!`,
             });
         } else if (item === "backup") {
           const names = object[item].split(",").map((x) => x.trim());
 
           items.push({
-            key,
-            toString: () => `@${names.join(", @")} -> ${label}`,
+            key: currentForm.key,
+            toString: () => `@${names.join(", @")} -> ${currentForm.label}`,
           });
         } else {
-          items.push({ key, toString: () => `@${object[item]} -> ${label}` });
+          items.push({
+            key: currentForm.key,
+            toString: () => `@${object[item]} -> ${currentForm.label}`,
+          });
         }
       });
 
       // eslint-disable-next-line consistent-return
-      return `ROLES: ${_orderBy(items, "key").join(
-        ` ${
-          object.variant ??
-          forms.find((form) => form.name === "variant").defaultOptions
-        } `,
-      )}`;
+      return (
+        !_isEmpty(object) &&
+        `ROLES: ${_orderBy(items, "key").join(
+          ` ${
+            object.variant ??
+            forms.find((form) => form.name === "variant").defaultOptions
+          } `,
+        )}`
+      );
     },
   },
 

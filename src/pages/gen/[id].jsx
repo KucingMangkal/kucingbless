@@ -48,7 +48,12 @@ function CheckboxGroupWithAllOptions({ items, onFormChange }) {
 
   return (
     <div style={{ marginBottom: "30px" }}>
-      <Checkbox.Group options={items} value={checkedList} onChange={onChange} />
+      <Checkbox.Group
+        style={{ display: "inline-block" }}
+        options={items}
+        value={checkedList}
+        onChange={onChange}
+      />
 
       <Checkbox
         indeterminate={indeterminate}
@@ -115,7 +120,7 @@ export default function Generator({ resolvedUrl }) {
         <Paragraph>{description}</Paragraph>
       </Typography>
 
-      <Form autoComplete="off" layout="vertical">
+      <Form autoComplete="off" layout="vertical" style={{ maxWidth: "600px" }}>
         {form.map((item) => {
           if (item.type === "select") {
             return (
@@ -128,6 +133,7 @@ export default function Generator({ resolvedUrl }) {
                   name={item.name}
                   placeholder={item.placeholder}
                   options={item.options}
+                  value={formValue[item.name]}
                 />
               </Form.Item>
             );
@@ -144,6 +150,7 @@ export default function Generator({ resolvedUrl }) {
                   placeholder={item.placeholder}
                   min={item.min}
                   max={item.max}
+                  value={formValue[item.name]}
                 />
               </Form.Item>
             );
@@ -155,6 +162,7 @@ export default function Generator({ resolvedUrl }) {
                 <Radio.Group
                   onChange={(e) => onRadioChange(e, item.name)}
                   size="large"
+                  value
                 >
                   {item.options.map((radioItem) => (
                     <Radio.Button key={radioItem.value} value={radioItem.value}>
@@ -191,7 +199,17 @@ export default function Generator({ resolvedUrl }) {
 
       <Tooltip title="Copied!" trigger="click" placement="left">
         <Button type="text" onClick={() => copyText(renderedTemplate)}>
-          {renderedTemplate}
+          <div
+            style={{
+              display: "block",
+              wordBreak: "keep-all",
+              whiteSpace: "initial",
+              width: "565px",
+              textAlign: "left",
+            }}
+          >
+            {renderedTemplate}
+          </div>
         </Button>
       </Tooltip>
     </Layout>
