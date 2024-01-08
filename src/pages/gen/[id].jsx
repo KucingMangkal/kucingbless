@@ -150,6 +150,17 @@ export default function Generator({ resolvedUrl }) {
       </Typography>
 
       <Form form={formState} layout="vertical" style={{ maxWidth: "600px" }}>
+        <Button
+          size="small"
+          style={{ marginBottom: "30px", fontSize: "75%" }}
+          onClick={() => {
+            formState.resetFields();
+
+            forceUpdate();
+          }}
+        >
+          Clear Form
+        </Button>
         {form.map((item) => {
           if (item.type === "select") {
             return (
@@ -226,7 +237,7 @@ export default function Generator({ resolvedUrl }) {
       </Form>
 
       <Tooltip title="Copied!" trigger="click" placement="left">
-        <Button type="text" onClick={() => copyText(renderedTemplate)}>
+        <Button type="text" onClick={() => copyText(renderedTemplate())}>
           <div
             style={{
               display: "block",
