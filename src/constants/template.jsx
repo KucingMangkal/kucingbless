@@ -237,7 +237,10 @@ const textTemplate = [
           object[item] &&
             items.push({
               key: currentForm.key,
-              toString: () => `Bless in ${object[item]} minutes!`,
+              toString: () =>
+                `Bless in ${object[item]} minute${
+                  object[item] > 1 ? "s" : ""
+                }!`,
             });
         } else if (item === "backup") {
           const names = object[item].split(",").map((x) => x.trim());
