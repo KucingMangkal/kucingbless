@@ -215,6 +215,10 @@ const textTemplate = [
             value: "|-|",
             label: "Variant 2",
           },
+          {
+            value: ", ",
+            label: "Variant 3",
+          },          
         ],
       },
     ],
