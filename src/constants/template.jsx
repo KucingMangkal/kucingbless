@@ -90,16 +90,16 @@ const textTemplate = [
             label: "Credits",
           },
           {
+            value: "res",
+            label: "Resource",
+          },
+          {
             value: "damage",
             label: "Damage",
           },
           {
             value: "health",
             label: "Health",
-          },
-          {
-            value: "res",
-            label: "Resource",
           },
           {
             value: "shields",
